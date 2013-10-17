@@ -31,7 +31,7 @@ public class GPUtil {
 
     public static void debug(Object o) {
         if (debug) {
-            System.out.println("DEBUG: " + o.toString());
+            System.out.println(o.toString());
         }
     }
 

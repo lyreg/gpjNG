@@ -1374,10 +1374,9 @@ public class GlobalPlatformService implements ISO7816, APDUListener {
         System.out.println("Provider for jcop emulator comptibility loaded.");
     }
 
-    public String getLine() throws IOException
+    public String getLine(BufferedReader in) throws IOException
     {
 		System.out.print(">");
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		return in.readLine();
     }
     
@@ -2041,6 +2040,9 @@ public class GlobalPlatformService implements ISO7816, APDUListener {
     	   			System.out.println("command not supported");
     			}
     			break;
+    		case "exit":
+    			System.exit(0);
+    			break;
     		default:
     			if(path!=null && !path.equals(""))
     			{
@@ -2570,10 +2572,14 @@ public class GlobalPlatformService implements ISO7816, APDUListener {
 	    					/*
 	    					 * shell
 	    					 */
-	    					while(commandLine)
-	    					{
-	    						service.commandLine(service.getLine());
-	    					}
+    						if(commandLine)
+    						{
+	    						BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+	    						while(true)
+	    						{
+		    						service.commandLine(service.getLine(in));
+		    					}
+		    				}
     					}
     					
     		} catch (Exception ce) {
