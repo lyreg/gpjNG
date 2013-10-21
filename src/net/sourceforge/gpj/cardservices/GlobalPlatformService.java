@@ -1374,12 +1374,6 @@ public class GlobalPlatformService implements ISO7816, APDUListener {
         System.out.println("Provider for jcop emulator comptibility loaded.");
     }
 
-    public String getLine(BufferedReader in) throws IOException
-    {
-		System.out.print(">");
-		return in.readLine();
-    }
-    
     public boolean runScript(String script)
     {
     	BufferedReader br;
@@ -2577,7 +2571,11 @@ public class GlobalPlatformService implements ISO7816, APDUListener {
 	    						BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 	    						while(true)
 	    						{
-		    						service.commandLine(service.getLine(in));
+	    							System.out.print(">");
+	    							String line = "#";
+	    							while(line.startsWith("#"))
+	    								line = in.readLine();
+	    						    service.commandLine(line);
 		    					}
 		    				}
     					}
