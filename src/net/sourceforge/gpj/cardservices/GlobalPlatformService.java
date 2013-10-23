@@ -1614,7 +1614,7 @@ public class GlobalPlatformService implements ISO7816, APDUListener {
     						return;
 						}
     					System.arraycopy(key, 0, data, 1 + i*0x16+2, 0x10);
-    					data[i*0x17+19] = 0x03;
+    					data[i*0x16+19] = 0x03;
     					System.arraycopy(keyCheck, 0, data, 1 + i*0x16+19, 3);    					
     				}
     				try {
