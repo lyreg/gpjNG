@@ -2108,7 +2108,7 @@ public class GlobalPlatformService implements ISO7816, APDUListener {
         System.out
                 .println(" -jcop             connect to the jcop emulator on port 8015");
         System.out.println(" -h|-help|--help   print this usage info");
-        System.out.println(" -t Remote|localhost:3000   connect to a socket terminal");
+        System.out.println(" -t [Remote|]localhost:3000   connect to a socket terminal");
         System.out.println(" -cmd   block on command line");
         System.out.println(" -s   <script/to/run.jcsh>  run a script");
         System.out.println("");
@@ -2415,19 +2415,17 @@ public class GlobalPlatformService implements ISO7816, APDUListener {
     		}
     		else
     		{
-    			String token = null;
-    			short i;
-    			for(i=0;i<use_jc_remote_terminal.length();i++)
+    			for(short i=0;i<use_jc_remote_terminal.length();i++)
     			{
     				if(use_jc_remote_terminal.substring(i,i+1).equals("|"))
     				{
-    					token = use_jc_remote_terminal.substring((i+1),(use_jc_remote_terminal.length()));
+    					use_jc_remote_terminal = use_jc_remote_terminal.substring((i+1),(use_jc_remote_terminal.length()));
     					break;
     				}
     			}
-    			if(token!=null)
+    			if(use_jc_remote_terminal!=null)
     			{
-    				String[] tokens = token.split(":");
+    				String[] tokens = use_jc_remote_terminal.split(":");
     				if(tokens.length==2)
     				{
     					int port = Integer.parseInt(tokens[1]);
