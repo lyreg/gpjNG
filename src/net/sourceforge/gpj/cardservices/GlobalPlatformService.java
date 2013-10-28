@@ -2574,6 +2574,8 @@ public class GlobalPlatformService implements ISO7816, APDUListener {
 	    							while(line.startsWith("#"))
 	    							{
 	    								line = in.readLine();
+	    								if(line==null)
+	    									System.exit(0);
 	    								line = line.trim();
 	    							}
 	    						    service.commandLine(line);
