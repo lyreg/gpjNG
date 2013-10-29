@@ -1450,7 +1450,7 @@ public class GlobalPlatformService implements ISO7816, APDUListener {
     	helpMap.put("/card","/card    reset the card and select the GP card manager");
     	helpMap.put("/atr","/atr   reset the card");
     	helpMap.put("set-key","set-key key-set/key-id(1|2|3)/key-type(DES|DES-ECB|DES-CBC)/key-value(16 byte double length key) set a key in the shell ");
-    	helpMap.put("put-key","set-key -m|--mode add|replace [-r|--replace-keySet key-set] key-set/key-id(1|2|3)/key-type(DES|DES-ECB|DES-CBC)/key-value(16 byte double length key) set a key in the shell ");
+    	helpMap.put("put-key","put-key -m|--mode add|replace [-r|--replace-keySet key-set] key-set/key-id(1|2|3)/key-type(DES|DES-ECB|DES-CBC)/key-value(16 byte double length key) set a key in the shell ");
        }
     
     public void printAllHelp()
@@ -2008,8 +2008,6 @@ public class GlobalPlatformService implements ISO7816, APDUListener {
         		}
     			else
     				System.out.println("command not supported");
-    			break;
-    		case "put":
     			break;
     		case "/card":
     			try {
