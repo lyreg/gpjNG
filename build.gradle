@@ -1,0 +1,34 @@
+//  More information on available tasks for the application plugin can be found here:
+//
+//     http://www.gradle.org/docs/current/userguide/application_plugin.html
+//
+//  The command below will create a tar file in "build/distributions/" that
+//  contains the compiled class files, the dependant jar files, as well as
+//  Unix and Windows scripts to invoke the application:
+//
+//     ./gradlew clean distTar
+//
+apply plugin: 'application'
+apply plugin: 'eclipse'
+
+tasks.eclipse.dependsOn(cleanEclipse)
+
+sourceCompatibility = '1.7'
+
+mainClassName = "net.sourceforge.gpj.cardservices.GlobalPlatformService"
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/'
+        }
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.9'
+}
