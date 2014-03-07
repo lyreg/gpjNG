@@ -1696,7 +1696,7 @@ public class GlobalPlatformService implements ISO7816, APDUListener {
     					path = m.group(1);
     				else
     				{
-    					p = Pattern.compile("\\s*path\\s*=\\s*([^ ]+).*");
+    					p = Pattern.compile("\\s*path\\s+([^ ]+).*");
         				m = p.matcher(cmd);
         				if(m.matches())
         					path = m.group(1);
@@ -1934,6 +1934,22 @@ public class GlobalPlatformService implements ISO7816, APDUListener {
     		case "/send":
     			if(cmdLine.length==2 && !cmdLine[1].equals(""))
     			{
+    				/*byte[] tmp = new byte[0xffff+7];
+    				tmp[0] = 0x00;
+    				tmp[1] = 0x01;
+    				tmp[2] = 0x00;
+    				tmp[3] = 0x00;
+    				tmp[4] = 0x00;
+    				tmp[5] = (byte)0xff;
+    				tmp[6] = (byte)0xFF;
+    				int i;
+    				for(i=0;i<0xffff;i++)
+    					tmp[7+i] = (byte)i;
+    				//tmp[7+i] = 0;
+    				//i++;
+    				//tmp[7+i] = 0;
+    				CommandAPDU c = new CommandAPDU(tmp);*/
+    				
 	    			CommandAPDU c = new CommandAPDU(GPUtil.stringToByteArray(cmdLine[1]));
 	    			try {
 	    				long t = System.currentTimeMillis();

@@ -48,11 +48,8 @@ public class CloudChannel extends CardChannel {
 
 	private byte[] sRead() throws IOException
 	{
-		short len = 0;
+		int len = 0;
 		byte a;
-		byte b;
-		byte c;
-		byte d;
 		int r = is.read();
 		if(r==-1)
 			throw new IOException();
@@ -60,42 +57,68 @@ public class CloudChannel extends CardChannel {
 		r = is.read();
 		if(r==-1)
 			throw new IOException();
-		b = (byte)r;
-		r = is.read();
-		if(r==-1)
-			throw new IOException();
-		c = (byte)r;
-		len = (short)(0xFFFF&(r<<8));
-		r = is.read();
-		if(r==-1)
-			throw new IOException();
-		d = (byte)r;
-		len |= r;
-		byte[] pkt = new byte[len+4];
-		pkt[0] = a;
-		pkt[1] = b;
-		pkt[2] = c;
-		pkt[3] = d;
-		byte[] apdu = new byte[len];
+		
+		if((a&0x40)==0x00)
+		{
+			r = is.read();
+			if(r==-1)
+				throw new IOException();
+			len = (int)(0xFF00&(r<<8));
+			r = is.read();
+			if(r==-1)
+				throw new IOException();
+			len |= r;
+		}
+		else
+		{
+			r = is.read();
+			if(r==-1)
+				throw new IOException();
+			len = (int)(0xFF0000&(r<<16));
+			r = is.read();
+			if(r==-1)
+				throw new IOException();
+			len += (int)(0xFF00&(r<<8));;			
+			r = is.read();
+			if(r==-1)
+				throw new IOException();
+			len |= r;			
+		}
+		
+		byte[] pkt = new byte[len];
 		for(int i=0;i<len;i++)
 		{
 			r = is.read();
 			if(r==-1)
 				throw new IOException();
-			apdu[i] = (byte)r;
+			pkt[i] = (byte)r;
 		}
-		return apdu;
+		return pkt;
 	}
 
 	protected void sWrite(byte[] buffer) throws IOException
 	{
 		try{
-			byte[] tmp = new byte[buffer.length+4];
-			tmp[0] = 0x01;
-			tmp[1] = 0x00;
-			tmp[2] = (byte)((buffer.length&0xFF00)>>8);
-			tmp[3] = (byte)(buffer.length&0x00FF);
-			System.arraycopy(buffer, 0, tmp, 4, buffer.length);
+			byte[] tmp = null;
+			if(buffer.length>0xff)
+			{
+				tmp = new byte[buffer.length+5];
+				tmp[0] = 0x41;
+				tmp[1] = 0x00;
+				tmp[2] = (byte)((buffer.length&0xFF0000)>>16);
+				tmp[3] = (byte)((buffer.length&0x00FF00)>>8);
+				tmp[4] = (byte)(buffer.length&0x0000FF);
+				System.arraycopy(buffer, 0, tmp, 5, buffer.length);
+			}
+			else
+			{
+				tmp = new byte[buffer.length+4];
+				tmp[0] = 0x01;
+				tmp[1] = 0x00;
+				tmp[2] = (byte)((buffer.length&0xFF00)>>8);
+				tmp[3] = (byte)(buffer.length&0x00FF);
+				System.arraycopy(buffer, 0, tmp, 4, buffer.length);
+			}
 			buffer = tmp;
 			os.write(buffer);
 			os.flush();
@@ -125,6 +148,16 @@ public class CloudChannel extends CardChannel {
 		}
 		
 		return 0;
+	}
+
+	public byte[] transmitBytes(byte[] apdu) throws CardException {
+		try {
+			sWrite(apdu);
+			byte[] apduR = sRead();
+			return apduR;
+		} catch (IOException e) {
+			throw new CardException(e);
+		}
 	}
 
 }

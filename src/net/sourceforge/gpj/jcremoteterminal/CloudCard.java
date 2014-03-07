@@ -62,11 +62,8 @@ public class CloudCard extends Card {
 
 	private byte[] sRead(InputStream is) throws IOException
 	{
-		short len = 0;
+		int len = 0;
 		byte a;
-		byte b;
-		byte c;
-		byte d;
 		int r = is.read();
 		if(r==-1)
 			throw new IOException();
@@ -74,31 +71,43 @@ public class CloudCard extends Card {
 		r = is.read();
 		if(r==-1)
 			throw new IOException();
-		b = (byte)r;
-		r = is.read();
-		if(r==-1)
-			throw new IOException();
-		c = (byte)r;
-		len = (short)(0xFFFF&(r<<8));
-		r = is.read();
-		if(r==-1)
-			throw new IOException();
-		d = (byte)r;
-		len |= r;
-		byte[] pkt = new byte[len+4];
-		pkt[0] = a;
-		pkt[1] = b;
-		pkt[2] = c;
-		pkt[3] = d;
-		byte[] apdu = new byte[len];
+		
+		if((a&0x40)==0x00)
+		{
+			r = is.read();
+			if(r==-1)
+				throw new IOException();
+			len = (int)(0xFF00&(r<<8));
+			r = is.read();
+			if(r==-1)
+				throw new IOException();
+			len |= r;
+		}
+		else
+		{
+			r = is.read();
+			if(r==-1)
+				throw new IOException();
+			len = (int)(0xFF0000&(r<<16));
+			r = is.read();
+			if(r==-1)
+				throw new IOException();
+			len += (int)(0xFF00&(r<<8));;			
+			r = is.read();
+			if(r==-1)
+				throw new IOException();
+			len |= r;			
+		}
+		
+		byte[] pkt = new byte[len];
 		for(int i=0;i<len;i++)
 		{
 			r = is.read();
 			if(r==-1)
 				throw new IOException();
-			apdu[i] = (byte)r;
+			pkt[i] = (byte)r;
 		}
-		return apdu;
+		return pkt;
 	}
 
 
