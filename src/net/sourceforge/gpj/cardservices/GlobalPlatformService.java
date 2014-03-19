@@ -1934,20 +1934,22 @@ public class GlobalPlatformService implements ISO7816, APDUListener {
     		case "/send":
     			if(cmdLine.length==2 && !cmdLine[1].equals(""))
     			{
-    				/*byte[] tmp = new byte[0xffff+7];
+    				/*byte[] tmp = new byte[0xFFff+7+2];
     				tmp[0] = 0x00;
-    				tmp[1] = 0x01;
+    				tmp[1] = 0x00;
     				tmp[2] = 0x00;
     				tmp[3] = 0x00;
     				tmp[4] = 0x00;
-    				tmp[5] = (byte)0xff;
-    				tmp[6] = (byte)0xFF;
+    				tmp[5] = (byte)0xFf;
+    				tmp[6] = (byte)0xff;
     				int i;
-    				for(i=0;i<0xffff;i++)
+    				for(i=0;i<0xFfff;i++)
     					tmp[7+i] = (byte)i;
-    				//tmp[7+i] = 0;
-    				//i++;
-    				//tmp[7+i] = 0;
+    				tmp[7+i-2] = 0x44;
+    				tmp[7+i-1] = 0x55;
+    				tmp[7+i] = 0;
+    				i++;
+    				tmp[7+i] = 0;
     				CommandAPDU c = new CommandAPDU(tmp);*/
     				
 	    			CommandAPDU c = new CommandAPDU(GPUtil.stringToByteArray(cmdLine[1]));
