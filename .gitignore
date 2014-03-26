@@ -1,7 +1,9 @@
 # Generated files
 gen/
 bin/
-build/
+build/tmp
+build/dependency-cache
+build/classes
 target/
 classes/
 *.log
@@ -14,6 +16,8 @@ local.properties
 *.ap_
 *.dex
 .gradle/
+
+!build/libs/gpjNG.jar
 
 # Backup files
 *~
