@@ -1438,7 +1438,7 @@ public class GlobalPlatformService implements ISO7816, APDUListener {
     {
     	helpMap = new HashMap<String,String>();
     	helpMap.put("help","this");
-    	helpMap.put("/set-var","/set-var <path=\"script\">  set a shell variable");
+    	helpMap.put("/set-var","/set-var <path \"script\">  set a shell variable");
     	helpMap.put("delete","delete [-r|--delete-related] <aid> delete an aid");
     	helpMap.put("install","install -i <instance aid> C9#([params]) <package aid> <applet aid>  install for install an applet");
     	helpMap.put("auth","auth [plain|enc|mac|rmac] [keyId]  open a secure channel");
@@ -1690,7 +1690,7 @@ public class GlobalPlatformService implements ISO7816, APDUListener {
     			if(cmdLine.length>1)
     			{
     				cmd = cmd.replace("/set-var","");
-    				Pattern p = Pattern.compile("\\s*path\\s*=\\s*\"([^\"]+)\".*");
+    				Pattern p = Pattern.compile("\\s*path\\s+\"([^\"]+)\".*");
     				Matcher m = p.matcher(cmd);
     				if(m.matches())
     					path = m.group(1);
