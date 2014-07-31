@@ -1900,6 +1900,10 @@ public class GlobalPlatformService implements ISO7816, APDUListener {
     						c = new CommandAPDU(0x00,0xA4,0x04,0x00,GPUtil.readableStringToByteArray(cmdLine[1]));
     					else
     						c = new CommandAPDU(0x00,0xA4,0x04,0x00,GPUtil.stringToByteArray(cmdLine[1]));
+    					byte[] tmp = new byte[c.getBytes().length+1];
+    					System.arraycopy(c.getBytes(), 0,tmp, 0, c.getBytes().length);
+    					tmp[tmp.length-1] = 0x00;
+    					c = new CommandAPDU(tmp);
     					long t = System.currentTimeMillis();
     					r = channel.transmit(c);
     					notifyExchangedAPDU(c, r, (int)(System.currentTimeMillis()-t));
@@ -1917,10 +1921,16 @@ public class GlobalPlatformService implements ISO7816, APDUListener {
     			if(cmdLine.length==2 && !cmdLine[1].equals(""))
     			{
     				try {
+	    				CommandAPDU c;
     					if((cmdLine[1].startsWith("|")))
-    	    				this.transmit(new CommandAPDU(0x00,0xA4,0x04,0x00,GPUtil.readableStringToByteArray(cmdLine[1])));
+    						c = new CommandAPDU(0x00,0xA4,0x04,0x00,GPUtil.readableStringToByteArray(cmdLine[1]));
     					else
-    	    				this.transmit(new CommandAPDU(0x00,0xA4,0x04,0x00,GPUtil.stringToByteArray(cmdLine[1])));
+    						c = new CommandAPDU(0x00,0xA4,0x04,0x00,GPUtil.stringToByteArray(cmdLine[1]));
+    					byte[] tmp = new byte[c.getBytes().length+1];
+    					System.arraycopy(c.getBytes(), 0,tmp, 0, c.getBytes().length);
+    					tmp[tmp.length-1] = 0x00;
+    					c = new CommandAPDU(tmp);
+    					this.transmit(c);
 					} catch (IllegalStateException e) {
 						System.out.println("data format not supported");
 					} catch (CardException e) {
